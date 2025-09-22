@@ -20,6 +20,47 @@
   </head>
 
   <body>
-    <%= yield %>
+    <!-- ナビゲーションバー -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="container">
+        <%= link_to "イベント管理", root_path, class: "navbar-brand" %>
+
+        <div class="navbar-nav ms-auto">
+          <% if user_signed_in? %>
+            <!-- ログイン済みの場合 -->
+            <span class="navbar-text me-3">
+              こんにちは、<%= current_user.full_name %>さん
+            </span>
+            <%= link_to "ログアウト", destroy_user_session_path, method: :delete, class: "btn btn-outline-light" %>
+          <% else %>
+            <!-- 未ログインの場合 -->
+            <%= link_to "ログイン", new_user_session_path, class: "btn btn-outline-light" %>
+          <% end %>
+        </div>
+      </div>
+    </nav>
+
+    <!-- メインコンテンツ -->
+    <main class="container mt-4">
+      <!-- 成功メッセージ -->
+      <% if notice %>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          <%= notice %>
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+      <% end %>
+
+      <!-- エラーメッセージ -->
+      <% if alert %>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <%= alert %>
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+      <% end %>
+
+      <!-- 各ページの内容がここに表示される -->
+      <%= yield %>
+    </main>
+
   </body>
 </html>

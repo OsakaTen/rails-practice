@@ -84,4 +84,8 @@ group :development do
 
   # Debugging tool
   gem "binding_of_caller"
+
+  gem 'devise'
+
+  gem 'jquery-rails'
 end
