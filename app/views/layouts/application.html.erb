@@ -1,48 +1,34 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "App" %></title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="robots" content="noindex, nofollow">
+    <title>MyApp</title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <%= yield :head %>
-
-    <link rel="manifest" href="/manifest.json">
-    <link rel="icon" href="/icon.png" type="image/png">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/icon.png">
-    <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-    <%= javascript_importmap_tags %>
+    <%= javascript_importmap_tags %>   <!-- ← ここに変更 -->
   </head>
 
   <body>
-    <!-- ナビゲーションバー -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
       <div class="container">
-        <%= link_to "イベント管理", root_path, class: "navbar-brand" %>
+        <%= link_to "イベント管理システム", root_path, class: "navbar-brand" %>
 
         <div class="navbar-nav ms-auto">
           <% if user_signed_in? %>
-            <!-- ログイン済みの場合 -->
             <span class="navbar-text me-3">
               こんにちは、<%= current_user.full_name %>さん
             </span>
-            <%= link_to "ログアウト", destroy_user_session_path, method: :delete, class: "btn btn-outline-light" %>
+            <%= link_to "イベント一覧", events_path, class: "nav-link" %>
+            <%= link_to "ログアウト", destroy_user_session_path, method: :delete, class: "nav-link" %>
           <% else %>
-            <!-- 未ログインの場合 -->
-            <%= link_to "ログイン", new_user_session_path, class: "btn btn-outline-light" %>
+            <%= link_to "ログイン", new_user_session_path, class: "nav-link" %>
           <% end %>
         </div>
       </div>
     </nav>
 
-    <!-- メインコンテンツ -->
-    <main class="container mt-4">
-      <!-- 成功メッセージ -->
+    <div class="container mt-4">
       <% if notice %>
         <div class="alert alert-success alert-dismissible fade show" role="alert">
           <%= notice %>
@@ -50,7 +36,6 @@
         </div>
       <% end %>
 
-      <!-- エラーメッセージ -->
       <% if alert %>
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
           <%= alert %>
@@ -58,9 +43,7 @@
         </div>
       <% end %>
 
-      <!-- 各ページの内容がここに表示される -->
       <%= yield %>
-    </main>
-
+    </div>
   </body>
 </html>

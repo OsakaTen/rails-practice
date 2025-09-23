@@ -1,0 +1,7 @@
+<h1>Welcome!</h1>
+<p>ログインしていない場合はここがホームページです。</p>
+<% if user_signed_in? %>
+  <%= link_to "イベント一覧へ", events_path %>
+<% else %>
+  <%= link_to "ログイン", new_user_session_path %>
+<% end %>
