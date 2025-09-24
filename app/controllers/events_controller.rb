@@ -1,7 +1,6 @@
 class EventsController < ApplicationController
-  before_action :authenticate_user!, except: [:show_public]
+  before_action :authenticate_user!
   before_action :set_event, only: [:show, :edit, :update, :destroy, :show_public]
-  before_action :authorize_admin!, except: [:show_public, :index]
 
   def index
     @events = current_user.admin? ? Event.all : current_user.events

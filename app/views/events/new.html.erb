@@ -1,14 +1,2 @@
-<!-- new.html.erb -->
-<h1>新しいイベントを作成</h1>
-
 <%= render 'form', event: @event %>
-
-<%= link_to 'イベント一覧に戻る', events_path, class: 'btn btn-secondary' %>
-
-<!-- edit.html.erb -->
-<h1>イベントを編集</h1>
-
-<%= render 'form', event: @event %>
-
-<%= link_to '詳細', @event, class: 'btn btn-secondary' %> |
-<%= link_to 'イベント一覧', events_path, class: 'btn btn-secondary' %>
+<%= link_to 'イベント一覧', events_path%>

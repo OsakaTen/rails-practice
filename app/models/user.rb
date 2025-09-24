@@ -6,13 +6,11 @@ class User < ApplicationRecord
 
   has_many :events, dependent: :destroy
 
-  validates :first_name, :last_name, :role, presence: true
+  # validates :first_name, :last_name, :role, presence: true
+
+  enum role: { user: 0, admin: 1 }
 
   def full_name
-    "#{first_name} #{last_name}"
-  end
-
-  def admin?
-    role == 'admin'
+    [first_name, last_name].compact.join(" ")
   end
 end

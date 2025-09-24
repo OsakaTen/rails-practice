@@ -2,6 +2,6 @@
 class Event < ApplicationRecord
   belongs_to :user
 
-  validates :title, :body, :event_date, :organizer_name, :target_department, presence: true
+  validates :title, :description, :event_date, :organizer_name, :target_departments, presence: true
 
 end

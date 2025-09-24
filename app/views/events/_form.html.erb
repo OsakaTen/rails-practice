@@ -1,45 +1,50 @@
-<%= form_with(model: event, local: true, class: "row g-3") do |form| %>
-  <% if event.errors.any? %>
-    <div class="col-12">
-      <div class="alert alert-danger">
-        <h4><%= pluralize(event.errors.count, "error") %> でイベントの保存ができませんでした:</h4>
-        <ul class="mb-0">
-          <% event.errors.each do |error| %>
-            <li><%= error.full_message %></li>
-          <% end %>
-        </ul>
+<div class="flex justify-center items-center mt-5">
+  <div class="w-full max-w-sm bg-white p-8 rounded-md border">
+    <h1 class="text-2xl font-bold text-center mb-6">新しいイベントを作成</h1>
+      <%= form_with(model: event, local: true) do |form| %>
+      <% if event.errors.any? %>
+        <div class="col-12">
+          <div class="alert alert-danger">
+            <h4><%= pluralize(event.errors.count, "error") %> でイベントの保存ができませんでした:</h4>
+            <ul class="mb-0">
+              <% event.errors.each do |error| %>
+                <li><%= error.full_message %></li>
+              <% end %>
+            </ul>
+          </div>
+        </div>
+      <% end %>
+
+      <div class="mb-4">
+        <%= form.label :title, "タイトル" %>
+        <%= form.text_field :title, class: " w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"  %>
       </div>
-    </div>
-  <% end %>
 
-  <div class="col-12">
-    <%= form.label :title, "イベントタイトル", class: "form-label" %>
-    <%= form.text_field :title, class: "form-control" %>
-  </div>
+      <div class="mb-4">
+        <%= form.label :description, "イベント説明"%>
+        <%= form.text_area :description, rows: 4, class: " w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" %>
+      </div>
 
-  <div class="col-12">
-    <%= form.label :description, "イベント説明", class: "form-label" %>
-    <%= form.text_area :description, rows: 4, class: "form-control" %>
-  </div>
+      <div class="mb-4">
+        <%= form.label :event_date, "開催日時"%>
+        <%= form.datetime_local_field :event_date, class: " w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" %>
+      </div>
 
-  <div class="col-md-6">
-    <%= form.label :event_date, "開催日時", class: "form-label" %>
-    <%= form.datetime_local_field :event_date, class: "form-control" %>
-  </div>
-
-  <div class="col-md-6">
-    <%= form.label :organizer_name, "主催者名", class: "form-label" %>
-    <%= form.text_field :organizer_name, class: "form-control",
+      <div class="mb-4">
+        <%= form.label :organizer_name, "主催者名"%>
+        <%= form.text_field :organizer_name, class: " w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" ,
         value: form.object.organizer_name || current_user.full_name %>
-  </div>
+      </div>
 
-  <div class="col-12">
-    <%= form.label :target_departments, "対象部署", class: "form-label" %>
-    <%= form.text_field :target_departments, class: "form-control",
+      <div class="mb-4">
+        <%= form.label :target_departments, "対象部署"%>
+        <%= form.text_field :target_departments, class: " w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" ,
         placeholder: "例：全社、開発部・営業部、企画部" %>
-  </div>
+      </div>
 
-  <div class="col-12">
-    <%= form.submit "保存", class: "btn btn-primary" %>
+      <div class="mb-4">
+        <%= form.submit "保存", class: "w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition mt-5" %>
+      </div>
+    <% end %>
   </div>
-<% end %>
+</div>
