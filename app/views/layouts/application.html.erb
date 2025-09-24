@@ -5,45 +5,12 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
+    <%= stylesheet_link_tag "application.tailwind", "data-turbo-track": "reload" %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-    <%= javascript_importmap_tags %>   <!-- ← ここに変更 -->
+    <%= javascript_importmap_tags %>
   </head>
 
   <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-      <div class="container">
-        <%= link_to "イベント管理システム", root_path, class: "navbar-brand" %>
-
-        <div class="navbar-nav ms-auto">
-          <% if user_signed_in? %>
-            <span class="navbar-text me-3">
-              こんにちは、<%= current_user.full_name %>さん
-            </span>
-            <%= link_to "イベント一覧", events_path, class: "nav-link" %>
-            <%= link_to "ログアウト", destroy_user_session_path, method: :delete, class: "nav-link" %>
-          <% else %>
-            <%= link_to "ログイン", new_user_session_path, class: "nav-link" %>
-          <% end %>
-        </div>
-      </div>
-    </nav>
-
-    <div class="container mt-4">
-      <% if notice %>
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-          <%= notice %>
-          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-      <% end %>
-
-      <% if alert %>
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-          <%= alert %>
-          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-      <% end %>
-
-      <%= yield %>
-    </div>
+    <%= yield %>
   </body>
 </html>

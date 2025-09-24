@@ -1,14 +1,34 @@
 <!-- new.html.erb -->
 <h1>新しいイベントを作成</h1>
 
-<%= render 'form', event: @event %>
+<%= form_with model: @event do |event| %>
 
-<%= link_to 'イベント一覧に戻る', events_path, class: 'btn btn-secondary' %>
+<div>
+  <%= event.label :title %>
+  <%= event.text_field :title %>
+  <% if @event.errors.full_messages_for(:title).any? %>
+  <ul>
+    <% @event.errors.full_messages_for(:title).each do |message| %>
+    <li><%= message %>
+    <% end %>
+  </ul>
+  <% end %>
+</div>
 
-<!-- edit.html.erb -->
-<h1>イベントを編集</h1>
+<div>
+  <%= event.label :body %>
+  <%= event.text_area :body %>
+  <% if @event.errors.full_messages_for(:body).any? %>
+  <ul>
+    <% @event.errors.full_messages_for(:body).each do |message| %>
+    <li><%= message %>
+    <% end %>
+  </ul>
+  <% end %>
+</div>
 
-<%= render 'form', event: @event %>
+<div>
+  <%= event.submit %>
+</div>
 
-<%= link_to '詳細', @event, class: 'btn btn-secondary' %> |
-<%= link_to 'イベント一覧', events_path, class: 'btn btn-secondary' %>
+<% end %>

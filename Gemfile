@@ -38,8 +38,9 @@ gem "redis"
 # Use dotenv to load environment variables from .env [https://github.com/bkeepers/dotenv]
 gem "dotenv-rails"
 
-gem "tailwindcss-rails", "~> 3.3"
-gem "tailwindcss-ruby", "~> 3.4" # only necessary with tailwindcss-rails <= 3.3.0
+# gem "tailwindcss-rails", "~> 3.3"
+# gem "tailwindcss-ruby", "~> 3.4" # only necessary with tailwindcss-rails <= 3.3.0
+gem "cssbundling-rails"
 
 gem "prism", "1.3.0" # Syntax highlighting for code blocks in markdown
 
@@ -88,4 +89,6 @@ group :development do
   gem 'devise'
 
   gem 'jquery-rails'
+
+  gem "cssbundling-rails"
 end
