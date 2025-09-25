@@ -1,71 +1,48 @@
-<div class="row">
-  <div class="col-md-8">
-    <div class="card">
-      <div class="card-header">
-        <h1><%= @event.title %></h1>
+<div class="flex justify-center items-center mt-20">
+  <div class="w-full max-w-md bg-white p-8 rounded-md border">
+    <div class="p-6">
+      <div class="mb-8">
+        <h1 class="text-xl font-bold text-gray-900"><%= @event.title %></h1>
       </div>
-      <div class="card-body">
-        <div class="mb-4">
-          <h5>イベント詳細</h5>
-          <p><%= simple_format(@event.description) %></p>
+      <div class="border-t border-gray-200  pt-8 space-y-6">
+        <div class="grid grid-cols-1 gap-x-6 gap-y-2">
+          <div class="text-sm font-medium text-gray-500 ">開催日</div>
+          <div class=" text-base text-gray-800 font-semibold"><%= @event.event_date %></div>
         </div>
 
-        <div class="row mb-3">
-          <div class="col-sm-3"><strong>開催日:</strong></div>
-          <div class="col-sm-9"><%= @event.formatted_event_date %></div>
+        <div class="grid grid-cols-1 gap-x-6 gap-y-2">
+          <div class="text-sm font-medium text-gray-500">主催者</div>
+          <div class="text-base text-gray-800 font-semibold"><%= @event.organizer_name %></div>
         </div>
 
-        <div class="row mb-3">
-          <div class="col-sm-3"><strong>主催者:</strong></div>
-          <div class="col-sm-9"><%= @event.organizer_name %></div>
+        <div class="grid grid-cols-1 gap-x-6 gap-y-2">
+          <div class="font-medium text-gray-500">対象部署</div>
+          <div class="text-base text-gray-800 font-semibold"><%= @event.target_departments %></div>
         </div>
 
-        <div class="row mb-3">
-          <div class="col-sm-3"><strong>対象部署:</strong></div>
-          <div class="col-sm-9"><%= @event.target_departments %></div>
+        <div class="mt-10 pt-8 border-t border-gray-200">
+          <h5 class="text-xl font-bold text-gray-900 mb-4">>>イベント詳細</h5>
+          <div class="max-w-none text-gray-600">
+            <p><%= simple_format(@event.description) %></p>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-
-  <div class="col-md-4">
-    <div class="card">
-      <div class="card-header">
-        <h5>管理操作</h5>
-      </div>
-      <div class="card-body">
-        <div class="d-grid gap-2">
-          <%= link_to '編集', edit_event_path(@event), class: 'btn btn-primary' %>
-          <%= link_to '削除', @event, method: :delete,
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-header">
+          <h5>管理操作</h5>
+        </div>
+        <div class="card-body">
+          <div class="d-grid gap-2">
+            <%= link_to '編集', edit_event_path(@event), class: 'btn btn-primary' %>
+            <%= link_to '削除', @event, method: :delete,
               confirm: '本当に削除しますか？',
               class: 'btn btn-danger' %>
-          <%= link_to 'イベント一覧に戻る', events_path, class: 'btn btn-secondary' %>
+            <%= link_to 'イベント一覧に戻る', events_path, class: 'btn btn-secondary' %>
+          </div>
         </div>
-
-        <hr>
-
-        <div class="mb-2">
-          <strong>公開URL:</strong>
-        </div>
-        <div class="input-group">
-          <input type="text" class="form-control form-control-sm"
-                value="<%= request.base_url %>/events/public/<%= @event.public_token %>"
-                readonly id="publicUrl">
-          <button class="btn btn-outline-secondary btn-sm" type="button"
-                  onclick="copyToClipboard()">コピー</button>
-        </div>
-        <small class="text-muted">このURLを社員に共有してください</small>
       </div>
     </div>
   </div>
 </div>
-
-<script>
-function copyToClipboard() {
-  const urlField = document.getElementById('publicUrl');
-  urlField.select();
-  urlField.setSelectionRange(0, 99999);
-  document.execCommand('copy');
-  alert('URLをクリップボードにコピーしました！');
-}
-</script>
