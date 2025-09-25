@@ -1,34 +1,40 @@
-
-
-      <div class="mb-6 flex items-center justify-between">
-          <%= link_to '新しいイベントを作成', new_event_path,  class: "  px-4 py-2 text-sm font-medium text-black"%>
-        </div>
+<div class="p-6 mb-6">
+  <%= link_to '新しいイベントを作成', new_event_path,  class: ""%>
+</div>
 
 <% if @events.any? %>
-  <div class="row">
-    <% @events.each do |event| %>
-      <div class="col-md-6 mb-4">
-        <div class="card h-100">
-          <div class="card-body">
-            <h5 class="card-title"><%= event.title %></h5>
-            <p class="card-text"><%= truncate(event.description, length: 100) %></p>
-
-            <div class="mb-2">
-              <strong>開催日:</strong> <%= event.formatted_event_date %><br>
-              <strong>主催者:</strong> <%= event.organizer_name %><br>
-              <strong>対象部署:</strong> <%= event.target_departments %>
-            </div>
-
-            <div class="btn-group" role="group">
-              <%= link_to '詳細', event, class: 'btn btn-outline-primary btn-sm' %>
-              <%= link_to '編集', edit_event_path(event), class: 'btn btn-outline-secondary btn-sm' %>
-              <%= link_to '削除', event, method: :delete,
-                  confirm: '本当に削除しますか？',
-                  class: 'btn btn-outline-danger btn-sm' %>
-            </div>
-          </div>
-        </div>
-      </div>
+  <div class="rounded-lg  text-center overflow-hidden border border-slate-200">
+      <table class="w-full ">
+        <thead class="bg-slate-100">
+          <tr>
+            <th class="px-6 py-4  text-slate-600 text-lg font-semibold  tracking-wider text-center">タイトル</th>
+            <th class="px-6 py-4  text-slate-600 text-lg font-semibold  tracking-wider text-center">開催日</th>
+            <th class="px-6 py-4  text-slate-600 text-lg font-semibold  tracking-wider text-center">主催者</th></th>
+            <th class="px-6 py-4  text-slate-600 text-lg font-semibold  tracking-wider text-center">対象部署</th>
+          </tr>
+        </thead>
+        <% @events.each do |event| %>
+          <tbody className="divide-y divide-slate-200">
+            <tr>
+              <td class="className=px-6 py-4"><%= event.title %></td>
+              <td class="className=px-6 py-4"><%= event.event_date %></td>
+              <td class="className=px-6 py-4"><%= event.organizer_name %></td>
+              <td class="className=px-6 py-4"><%= event.target_departments %></td>
+              <td class="className=px-6 py-4">
+                <div class="flex gap-2 justify-center" role="group">
+                  <button>
+                    <%= link_to '詳細', event %>
+                  </button>
+                  <button>
+                    <%= link_to '編集', edit_event_path(event) %>
+                  </button>
+                  <button>
+                    <%= link_to '削除', event, method: :delete,
+                    confirm: '本当に削除しますか？'%>
+                  </button>
+                </div>
+              </td>
+            </tr>
     <% end %>
   </div>
 <% else %>
