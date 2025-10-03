@@ -1,9 +1,9 @@
 class EventsController < ApplicationController
-  before_action :authenticate_user!
-  before_action :set_event, only: [:show, :edit, :update, :destroy, :show_public]
+  before_action :authenticate_user!, except: [:index, :show]
+  before_action :set_event, only: [:show, :edit, :update, :destroy]
 
   def index
-    @events = current_user.admin? ? Event.all : current_user.events
+    @events = Event.all.order(event_date: :desc)
   end
 
   def show; end
@@ -14,30 +14,41 @@ class EventsController < ApplicationController
 
   def create
     @event = current_user.events.new(event_params)
+
     if @event.save
-      redirect_to events_path, notice: "イベント登録完了！公開URL: #{show_public_event_url(@event)}"
+      redirect_to @event, notice: "イベント登録完了！"
     else
       render :new, status: :unprocessable_entity
     end
   end
 
-  def edit; end
+  def edit
+    unless @event.user == current_user
+      redirect_to events_path, alert: '他のユーザーのイベントは編集できません。'
+    end
+  end
 
   def update
+    unless @event.user == current_user
+      redirect_to events_path, alert: '他のユーザーのイベントは更新できません。'
+      return
+    end
+
     if @event.update(event_params)
-      redirect_to events_path, notice: "イベントが更新されました"
+      redirect_to @event, notice: 'イベントが更新されました。'
     else
       render :edit, status: :unprocessable_entity
     end
   end
 
   def destroy
-    @event.destroy
-    redirect_to events_path, notice: "イベントを削除しました"
-  end
+    unless @event.user == current_user
+      redirect_to events_path, alert: '他のユーザーのイベントは削除できません。'
+      return
+    end
 
-  def show_public
-    # 誰でも閲覧可能
+    @event.destroy
+    redirect_to events_path, notice: 'イベントが削除されました。', status: :see_other
   end
 
   private
@@ -46,11 +57,13 @@ class EventsController < ApplicationController
     @event = Event.find(params[:id])
   end
 
-  def authorize_admin!
-    redirect_to root_path, alert: "権限がありません" unless current_user.admin?
-  end
-
   def event_params
-    params.require(:event).permit(:title, :body, :event_date, :organizer_name, :target_department)
+    params.require(:event).permit(
+      :title,
+      :event_date,
+      :organizer_name,
+      :target_departments,
+      :description
+    )
   end
 end

@@ -21,28 +21,28 @@
         </div>
 
         <div class="mt-10 pt-8 border-t border-gray-200">
-          <h5 class="text-xl font-bold text-gray-900 mb-4">>>イベント詳細</h5>
-          <div class="max-w-none text-gray-600">
-            <p><%= simple_format(@event.description) %></p>
+          <h5 class="text-xl mb-4 font-medium text-gray-500">イベント詳細</h5>
+          <div class="max-w-none text-base text-gray-800 font-semibold">
+            <%= simple_format(@event.description) %>
+          </div>
+        </div>
+
+        <div class="mt-10 pt-8 border-t border-gray-200">
+          <h5 class="text-xl mb-4 font-medium text-gray-500">作成者</h5>
+          <div class="max-w-none text-base text-gray-800 font-semibold">
+            <%= @event.creator_name %>
           </div>
         </div>
       </div>
     </div>
-    <div class="col-md-4">
-      <div class="card">
-        <div class="card-header">
-          <h5>管理操作</h5>
-        </div>
-        <div class="card-body">
-          <div class="d-grid gap-2">
-            <%= link_to '編集', edit_event_path(@event), class: 'btn btn-primary' %>
-            <%= link_to '削除', @event, method: :delete,
-              confirm: '本当に削除しますか？',
-              class: 'btn btn-danger' %>
-            <%= link_to 'イベント一覧に戻る', events_path, class: 'btn btn-secondary' %>
-          </div>
-        </div>
-      </div>
+    <div class="flex justify-end gap-2">
+      <% if user_signed_in? && @event.user == current_user %>
+        <%= link_to "編集", edit_event_path(@event), class: "px-4 py-2 text-blue-600 bg-white border border-blue-600 rounded-md hover:bg-blue-50" %>
+        <%= button_to "削除", event_path(@event), method: :delete, 
+            data: { turbo_confirm: "本当に削除しますか？" },
+            class: "px-4 py-2 text-red-600 bg-white border border-red-600 rounded-md hover:bg-red-50" %>
+      <% end %>
+      <%= link_to 'イベント一覧に戻る', events_path%>
     </div>
   </div>
 </div>

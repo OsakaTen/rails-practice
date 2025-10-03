@@ -1,5 +1,12 @@
-<div class="p-6 mb-6">
+<div class="flex justify-between gap-5 mx-6 my-6">
   <%= link_to '新しいイベントを作成', new_event_path,  class: ""%>
+  <div>
+    <%= link_to "新規登録", new_user_registration_path, class: "px-6 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition" %>
+    <%= link_to "ログイン", new_user_session_path, class: "px-6 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition" %>
+    <%= form_with url: destroy_user_session_path, method: :delete, data: { turbo: false }, class: "inline-block" do %>
+    <%= submit_tag "ログアウト", class: "px-4 py-2 text-sm text-white bg-red-600 rounded-md hover:bg-red-700 cursor-pointer" %>
+    <% end %>
+  </div>
 </div>
 
 <% if @events.any? %>
@@ -11,6 +18,7 @@
             <th class="px-6 py-4  text-slate-600 text-lg font-semibold  tracking-wider text-center">開催日</th>
             <th class="px-6 py-4  text-slate-600 text-lg font-semibold  tracking-wider text-center">主催者</th></th>
             <th class="px-6 py-4  text-slate-600 text-lg font-semibold  tracking-wider text-center">対象部署</th>
+            <th class="px-6 py-4  text-slate-600 text-lg font-semibold  tracking-wider text-center">操作</th>
           </tr>
         </thead>
         <% @events.each do |event| %>
