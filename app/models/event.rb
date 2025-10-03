@@ -9,13 +9,13 @@ class Event < ApplicationRecord
   validates :description, presence: true, length: { maximum: 5000 }
   validates :target_departments, presence: true
 
-  # スコープ
+    # スコープ ここら下はAIで書きました
   scope :upcoming, -> { where('event_date >= ?', Date.today).order(event_date: :asc) }
   scope :past, -> { where('event_date < ?', Date.today).order(event_date: :desc) }
   scope :recent, -> { order(created_at: :desc) }
 
-  # コールバック
-  before_create :generate_public_token
+  # # コールバック
+  # before_create :generate_public_token
 
   # イベントが過去のものかチェック
   def past?
@@ -39,8 +39,8 @@ class Event < ApplicationRecord
 
   private
 
-  # 公開用トークンを生成
-  def generate_public_token
-    self.public_token = SecureRandom.urlsafe_base64(32)
-  end
+  # # 公開用トークンを生成
+  # def generate_public_token
+  #   self.public_token = SecureRandom.urlsafe_base64(32)
+  # end
 end

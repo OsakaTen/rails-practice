@@ -1,31 +1,37 @@
-<div class="flex justify-between gap-5 mx-6 my-6">
-  <%= link_to '新しいイベントを作成', new_event_path,  class: ""%>
-  <div>
-    <%= link_to "新規登録", new_user_registration_path, class: "px-6 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition" %>
-    <%= link_to "ログイン", new_user_session_path, class: "px-6 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition" %>
+<div class="flex justify-end gap-5 mx-6 my-6">
+  <% if user_signed_in? %>
+    <%= link_to '新しいイベントを作成', new_event_path,
+      class: "px-4 py-2  text-green-600 bg-white border border-green-600 rounded-md hover:bg-green-50 transition" %>
+
     <%= form_with url: destroy_user_session_path, method: :delete, data: { turbo: false }, class: "inline-block" do %>
-    <%= submit_tag "ログアウト", class: "px-4 py-2 text-sm text-white bg-red-600 rounded-md hover:bg-red-700 cursor-pointer" %>
+      <%= submit_tag "ログアウト", class: "px-4 py-2 text-red-600 bg-white border border-red-600 rounded-md hover:bg-red-50 transition" %>
     <% end %>
-  </div>
+  <% else %>
+    <%= link_to "新規登録", new_user_registration_path,
+      class: "px-4 py-2 text-gray-600 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition" %>
+
+    <%= link_to "ログイン", new_user_session_path,
+      class: "px-4 py-2 text-blue-600 bg-white border border-blue-600 rounded-md hover:bg-blue-50 transition" %>
+  <% end %>
 </div>
 
 <% if @events.any? %>
-  <div class="rounded-lg  text-center overflow-hidden border border-slate-200">
+  <div class="rounded-lg  text-center border border-slate-200">
       <table class="w-full ">
         <thead class="bg-slate-100">
-          <tr>
-            <th class="px-6 py-4  text-slate-600 text-lg font-semibold  tracking-wider text-center">タイトル</th>
-            <th class="px-6 py-4  text-slate-600 text-lg font-semibold  tracking-wider text-center">開催日</th>
-            <th class="px-6 py-4  text-slate-600 text-lg font-semibold  tracking-wider text-center">主催者</th></th>
-            <th class="px-6 py-4  text-slate-600 text-lg font-semibold  tracking-wider text-center">対象部署</th>
-            <th class="px-6 py-4  text-slate-600 text-lg font-semibold  tracking-wider text-center">操作</th>
+          <tr class="text-slate-600 text-lg font-semibold  tracking-wider text-center">
+            <th class="px-6 py-4">タイトル</th>
+            <th class="px-6 py-4">開催日</th>
+            <th class="px-6 py-4">主催者</th>
+            <th class="px-6 py-4">対象部署</th>
+            <th class="px-6 py-4">操作</th>
           </tr>
         </thead>
         <% @events.each do |event| %>
           <tbody className="divide-y divide-slate-200">
             <tr>
               <td class="className=px-6 py-4"><%= event.title %></td>
-              <td class="className=px-6 py-4"><%= event.event_date %></td>
+              <td class="className=px-6 py-4"><%= event.event_date.to_date %></td>
               <td class="className=px-6 py-4"><%= event.organizer_name %></td>
               <td class="className=px-6 py-4"><%= event.target_departments %></td>
               <td class="className=px-6 py-4">

@@ -2,12 +2,12 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   
   # 全ページで認証を要求しない（各コントローラーで制御）
-  # before_action :authenticate_user! は削除
   
   before_action :configure_permitted_parameters, if: :devise_controller?
 
   protected
 
+  #Aiで書きました
   def configure_permitted_parameters
     # 新規登録時に first_name, last_name, role を許可
     devise_parameter_sanitizer.permit(:sign_up, keys: [:first_name, :last_name, :role])
@@ -28,6 +28,6 @@ class ApplicationController < ActionController::Base
 
   # ログアウト後のリダイレクト先
   def after_sign_out_path_for(resource_or_scope)
-    root_path # または events_path
+    root_path 
   end
 end

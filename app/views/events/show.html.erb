@@ -7,12 +7,18 @@
       <div class="border-t border-gray-200  pt-8 space-y-6">
         <div class="grid grid-cols-1 gap-x-6 gap-y-2">
           <div class="text-sm font-medium text-gray-500 ">開催日</div>
-          <div class=" text-base text-gray-800 font-semibold"><%= @event.event_date %></div>
+          <div class=" text-base text-gray-800 font-semibold"><%= @event.event_date.to_date %></div>
         </div>
 
         <div class="grid grid-cols-1 gap-x-6 gap-y-2">
-          <div class="text-sm font-medium text-gray-500">主催者</div>
-          <div class="text-base text-gray-800 font-semibold"><%= @event.organizer_name %></div>
+          <div class="text-sm font-medium text-gray-500">主催者/作成者</div>
+          <div class="text-base text-gray-800 font-semibold">
+            <% if @event.organizer_name == @event.creator_name %>
+              <%= @event.organizer_name %>
+            <% else %>
+              <%= @event.organizer_name %> / <%= @event.creator_name %>
+            <% end %>
+          </div>
         </div>
 
         <div class="grid grid-cols-1 gap-x-6 gap-y-2">
@@ -26,23 +32,18 @@
             <%= simple_format(@event.description) %>
           </div>
         </div>
-
-        <div class="mt-10 pt-8 border-t border-gray-200">
-          <h5 class="text-xl mb-4 font-medium text-gray-500">作成者</h5>
-          <div class="max-w-none text-base text-gray-800 font-semibold">
-            <%= @event.creator_name %>
-          </div>
-        </div>
       </div>
     </div>
-    <div class="flex justify-end gap-2">
-      <% if user_signed_in? && @event.user == current_user %>
+    <div class="flex justify-between  gap-2">
+      <div class="flex justify-between gap-2">
+        <% if user_signed_in? && @event.user == current_user %>
         <%= link_to "編集", edit_event_path(@event), class: "px-4 py-2 text-blue-600 bg-white border border-blue-600 rounded-md hover:bg-blue-50" %>
         <%= button_to "削除", event_path(@event), method: :delete, 
             data: { turbo_confirm: "本当に削除しますか？" },
             class: "px-4 py-2 text-red-600 bg-white border border-red-600 rounded-md hover:bg-red-50" %>
-      <% end %>
-      <%= link_to 'イベント一覧に戻る', events_path%>
+        <% end %>
+      </div>
+      <%= link_to 'イベント一覧に戻る', events_path ,class:"mt-4"%>
     </div>
   </div>
 </div>
