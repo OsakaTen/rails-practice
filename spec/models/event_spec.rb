@@ -3,7 +3,7 @@ require 'rails_helper'
 
 RSpec.describe Event, type: :model do
   let(:user) {
-    User.create!(
+    User.new(
       email: "test@example.com",
       password: "password",
       first_name: "太郎",
@@ -32,6 +32,7 @@ RSpec.describe Event, type: :model do
       user: user
     )
     expect(event).not_to be_valid
+    expect(event.errors[:title]).to include("titleを入れてください")
   end
 
   it "説明が5000文字を超える場合、無効であること" do
@@ -43,5 +44,6 @@ RSpec.describe Event, type: :model do
       user: user
     )
     expect(event).not_to be_valid
+    expect(event.errors[:description]).to include("長すぎます(5000字以内にしてください)")
   end
 end

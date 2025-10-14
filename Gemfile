@@ -66,6 +66,9 @@ group :development, :test do
   gem "rubocop-rails-omakase", require: false
 
   gem 'rspec-rails'
+
+  gem 'capybara'
+  gem 'webdrivers'
 end
 
 group :development do
