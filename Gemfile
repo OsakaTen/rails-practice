@@ -42,6 +42,8 @@ gem "dotenv-rails"
 # gem "tailwindcss-ruby", "~> 3.4" # only necessary with tailwindcss-rails <= 3.3.0
 gem "cssbundling-rails"
 
+gem 'devise'
+
 gem "prism", "1.3.0" # Syntax highlighting for code blocks in markdown
 
 group :development, :test do
@@ -87,8 +89,6 @@ group :development do
 
   # Debugging tool
   gem "binding_of_caller"
-
-  gem 'devise'
 
   gem 'jquery-rails'
 end
