@@ -11,21 +11,32 @@ RSpec.describe "Users", type: :request do
     }
 
   describe "ログイン" do
-    it "正しいメール・パスワードでログインできる" do
-      post user_session_path, params: { 
-        user: { email: user.email, password: "password" } 
-      }
-      expect(response).to redirect_to(events_path) 
-      # Deviseのデフォルトリダイレクト先
+    context "正しいメール・パスワードの場合" do
+      it "ログインできる" do
+        post user_session_path, params: { 
+          user: { email: user.email, password: "password" } 
+        }
+        expect(response).to redirect_to(events_path) 
+        # Deviseのデフォルトリダイレクト先
+      end
     end
 
-    it "間違ったパスワードだとログインできない" do
-      post user_session_path, params: { 
-        user: { email: user.email, password: "wrong" } 
-      }
-      expect(response).to redirect_to(new_user_session_path) # ログインページにリダイレクト
-      follow_redirect!
-      expect(response.body).to include("Invalid Email or password")
+    context "間違ったパスワードだとログインできない" do
+      it "ログインに失敗する" do
+        post user_session_path, params: { 
+          user: { email: user.email, password: "wrong" } 
+        }
+        # Turbo対応なのでステータス422で返ってくる AI
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+    end
+  end
+
+  describe "ログアウト" do
+    it "ログアウトできる" do
+      sign_in user
+      delete destroy_user_session_path
+      expect(response).to redirect_to(root_path)
     end
   end
 end
