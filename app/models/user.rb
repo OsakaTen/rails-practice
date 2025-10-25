@@ -6,26 +6,18 @@ class User < ApplicationRecord
 
   has_many :events, dependent: :destroy
 
-  # validates :first_name, :last_name, :role, presence: true
+ # メール形式チェック
+ #形式のチェックが入っていなかったので、。 user@example のような不完全なメールでも「有効」になっていました。そこで形式を統一するために修正した。
+#  形式はAIで書いてもらいました
+  VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
+  validates :email, presence: true, uniqueness: true, format: { with: VALID_EMAIL_REGEX }
 
-  # enum role: { user: 0, admin: 1 }
-
-  # def full_name
-  #   [first_name, last_name].compact.join(" ")
-  # end
-
-  # バリデーション
-  validates :email, presence: true, uniqueness: true
   validates :first_name, presence: true
   validates :last_name, presence: true
 
   # フルネームを返すメソッド ここから下はAiで書きました
   def full_name
-    if first_name.present? && last_name.present?
-      "#{last_name} #{first_name}"
-    else
-      email
-    end
+    [last_name, first_name].compact.join(" ")
   end
 
   # 管理者かどうかをチェック
