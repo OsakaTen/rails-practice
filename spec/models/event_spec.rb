@@ -2,8 +2,9 @@
 require 'rails_helper'
 
 RSpec.describe Event, type: :model do
+  # EventモデルがUserと関連付いているので変更
   let(:user) do
-    User.new(
+    User.create!(
       email: "test@example.com",
       password: "password",
       first_name: "太郎",
@@ -176,6 +177,31 @@ RSpec.describe Event, type: :model do
           expect(event).to be_valid
         end
       end
+    end
+  end
+
+  describe 'CRUD機能' do
+    it 'レコードを作成できること' do
+      event = Event.create(valid_attributes)
+      expect(Event.find_by(title: "テストイベント")).to eq(event)
+    end
+
+    it 'レコードを読み取れること（Read）' do
+      event = Event.create!(valid_attributes)
+      found = Event.find(event.id)
+      expect(found.title).to eq("テストイベント")
+    end
+
+    it 'レコードを更新できること（Update）' do
+      event = Event.create!(valid_attributes)
+      event.update(title: "更新後イベント")
+      expect(event.reload.title).to eq("更新後イベント")
+    end
+
+    it 'レコードを削除できること（Delete）' do
+      event = Event.create!(valid_attributes)
+      event.destroy
+      expect(Event.exists?(event.id)).to be_falsey
     end
   end
 end

@@ -70,6 +70,9 @@ RSpec.configure do |config|
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
 
+# Deviseを使っているので、テストでログインする場合は sign_in ヘルパー を使う。なかったらログイン必須のActionはこれがないと失敗します。
   config.include Devise::Test::IntegrationHelpers, type: :request
+
+  
   config.include Devise::Test::IntegrationHelpers, type: :system
 end
