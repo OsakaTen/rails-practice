@@ -1,0 +1,181 @@
+# spec/models/event_spec.rb
+require 'rails_helper'
+
+RSpec.describe Event, type: :model do
+  let(:user) do
+    User.new(
+      email: "test@example.com",
+      password: "password",
+      first_name: "太郎",
+      last_name: "テスト"
+    )
+  end
+
+  let(:valid_attributes) do
+    {
+      title: "テストイベント",
+      event_date: Date.today,
+      organizer_name: "主催者",
+      target_departments: "全社",
+      description: "テスト用のイベント説明です",
+      user: user
+    }
+  end
+
+  describe 'バリデーション' do
+    context '全ての属性が有効な場合' do
+      it "有効であること" do
+        event = Event.new(valid_attributes)
+        expect(event).to be_valid
+      end
+    end
+
+    describe 'title' do #タイトル
+      # どんな入力経路でもバリデーションが正しく動くことを保証できる為にする。下2つ
+      context 'nilの場合' do
+        it '無効であること' do
+          event = Event.new(valid_attributes.merge(title: nil))
+          event.valid?
+          expect(event.errors[:title]).to include("can't be blank")
+        end
+      end
+
+      context '空文字の場合' do
+        it '無効であること' do
+          event = Event.new(valid_attributes.merge(title: ""))
+          event.valid?
+          expect(event.errors[:title]).to include("can't be blank")
+        end
+      end
+
+      context '空白のみの場合' do
+        it '無効であること' do
+          event = Event.new(valid_attributes.merge(title: "   "))
+          event.valid?
+          expect(event.errors[:title]).to include("can't be blank")
+        end
+      end
+
+      context '有効な値の場合' do
+        it '登録できること' do
+          event = Event.new(valid_attributes.merge(title: "新しいイベント"))
+          expect(event).to be_valid
+        end
+      end
+    end
+
+    describe 'description' do #説明
+      # 下2つは境界値テスト
+      context '5000文字の場合' do
+        it '有効であること' do
+          event = Event.new(valid_attributes.merge(description: "あ" * 5000))
+          expect(event).to be_valid
+        end
+      end
+
+      context '5001文字の場合' do
+        it '無効であること' do
+          event = Event.new(valid_attributes.merge(description: "あ" * 5001))
+          event.valid?
+          expect(event.errors[:description]).to include("is too long (maximum is 5000 characters)")
+        end
+      end
+
+      context '10000文字の場合' do
+        it '無効であること' do
+          event = Event.new(valid_attributes.merge(description: "あ" * 10000))
+          event.valid?
+          expect(event.errors[:description]).to include("is too long (maximum is 5000 characters)")
+        end
+      end
+
+      context 'nilの場合' do
+        it '有効であること（descriptionは任意項目）' do
+          event = Event.new(valid_attributes.merge(description: nil))
+          expect(event).to be_valid
+        end
+      end
+
+      context '空文字の場合' do
+        it '有効であること' do
+          event = Event.new(valid_attributes.merge(description: ""))
+          expect(event).to be_valid
+        end
+      end
+    end
+
+    describe 'event_date' do  #主催日
+      context '有効な日付の場合' do
+        it '登録できること' do
+          event = Event.new(valid_attributes.merge(event_date: Date.tomorrow))
+          expect(event).to be_valid
+        end
+      end
+
+      context '過去の日付の場合' do
+        it '登録できること' do
+          event = Event.new(valid_attributes.merge(event_date: Date.yesterday))
+          expect(event).to be_valid
+        end
+      end
+
+      context 'nilの場合' do
+        it '無効であること' do
+          event = Event.new(valid_attributes.merge(event_date: nil))
+          event.valid?
+          expect(event.errors[:event_date]).to be_present
+        end
+      end
+    end
+
+    describe 'organizer_name' do #主催者名
+      context 'nilの場合' do
+        it '無効であること' do
+          event = Event.new(valid_attributes.merge(organizer_name: nil))
+          event.valid?
+          expect(event.errors[:organizer_name]).to be_present
+        end
+      end
+
+      context '空文字の場合' do
+        it '無効であること' do
+          event = Event.new(valid_attributes.merge(organizer_name: ""))
+          event.valid?
+          expect(event.errors[:organizer_name]).to be_present
+        end
+      end
+
+      context '有効な値の場合' do
+        it '登録できること' do
+          event = Event.new(valid_attributes.merge(organizer_name: "新しい主催者"))
+          expect(event).to be_valid
+        end
+      end
+    end
+
+    describe 'target_departments' do #部署
+      context 'nilの場合' do
+        it '無効であること' do
+          event = Event.new(valid_attributes.merge(target_departments: nil))
+          event.valid?
+          expect(event.errors[:target_departments]).to be_present
+        end
+      end
+
+      context '空文字の場合' do
+        it '無効であること' do
+          event = Event.new(valid_attributes.merge(target_departments: ""))
+          event.valid?
+          expect(event.errors[:target_departments]).to be_present
+        end
+      end
+
+      context '有効な値の場合' do
+        it '登録できること' do
+          event = Event.new(valid_attributes.merge(target_departments: "営業部"))
+          expect(event).to be_valid
+        end
+      end
+    end
+  end
+end

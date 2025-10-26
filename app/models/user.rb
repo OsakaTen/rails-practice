@@ -16,6 +16,8 @@ class User < ApplicationRecord
 
   # バリデーション
   validates :email, presence: true, uniqueness: true
+  validates :first_name, presence: true
+  validates :last_name, presence: true
 
   # フルネームを返すメソッド ここから下はAiで書きました
   def full_name

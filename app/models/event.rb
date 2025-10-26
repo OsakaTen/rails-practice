@@ -6,7 +6,7 @@ class Event < ApplicationRecord
   validates :title, presence: true, length: { maximum: 200 }
   validates :event_date, presence: true
   validates :organizer_name, presence: true
-  validates :description, presence: true, length: { maximum: 5000 }
+  validates :description, allow_blank: true, length: { maximum: 5000 }
   validates :target_departments, presence: true
 
     # スコープ ここら下はAIで書きました
