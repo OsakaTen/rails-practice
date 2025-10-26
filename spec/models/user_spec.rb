@@ -19,56 +19,94 @@ RSpec.describe User, type: :model do
     end
 
     describe "email" do
-      it "必須であること" do
-        user = User.new(valid_attributes.merge(email: nil))
-        user.valid?
-        expect(user.errors[:email]).to include("can't be blank")
-      end
-
-      it "空白のみの場合は無効であること" do
-        user = User.new(valid_attributes.merge(email: "   "))
-        user.valid?
-        expect(user.errors[:email]).to include("can't be blank")
-      end
-
-      it "形式が正しい場合は有効であること" do
-        user = User.new(valid_attributes.merge(email: "valid@example.com"))
-        expect(user).to be_valid
-      end
-
-      it "形式が不正な場合は無効であること" do
-        invalid_emails = ["invalid", "invalid@", "@example.com", "user@example"]
-        invalid_emails.each do |email|
-          user = User.new(valid_attributes.merge(email: email))
-          expect(user).not_to be_valid, "#{email} は無効な形式です"
+      context 'nilの場合' do
+        it "無効であること" do
+          user = User.new(valid_attributes.merge(email: nil))
+          user.valid?
+          expect(user.errors[:email]).to include("can't be blank")
         end
       end
 
-      it "重複したメールアドレスは無効であること" do
-        User.create!(valid_attributes)
-        dup_user = User.new(valid_attributes.merge(password: "anotherpass"))
+      context '空文字の場合' do
+        it '無効であること' do
+          user = User.new(valid_attributes.merge(email: ""))
+          user.valid?
+          expect(user.errors[:email]).to include("can't be blank")
+        end
+      end
 
-        dup_user.valid?
-        expect(dup_user.errors[:email]).to include("has already been taken")
+      context '空白のみの場合' do
+        it "無効であること" do
+          user = User.new(valid_attributes.merge(email: "   "))
+          user.valid?
+          expect(user.errors[:email]).to include("can't be blank")
+        end
+      end
+
+      context '形式が正しい場合' do
+        it "有効であること" do
+          user = User.new(valid_attributes.merge(email: "valid@example.com"))
+          expect(user).to be_valid
+        end
+      end
+
+      context '形式が不正な場合' do
+        it "無効であること" do
+          invalid_emails = ["invalid", "invalid@", "@example.com", "user@example"]
+          invalid_emails.each do |email|
+            user = User.new(valid_attributes.merge(email: email))
+            expect(user).not_to be_valid, "#{email} は無効な形式です"
+          end
+        end
+      end
+
+      context '重複したメールアドレスの場合' do
+        it "無効であること" do
+          User.create!(valid_attributes)
+          dup_user = User.new(valid_attributes.merge(password: "anotherpass"))
+          dup_user.valid?
+          expect(dup_user.errors[:email]).to include("has already been taken")
+        end
+      end
+
+      context '大文字小文字を区別せず重複チェックする場合' do
+        it '無効であること' do
+          User.create!(valid_attributes)
+          dup_user = User.new(valid_attributes.merge(email: "TEST@EXAMPLE.COM", password: "anotherpass"))
+          dup_user.valid?
+          expect(dup_user.errors[:email]).to include("has already been taken")
+        end
       end
     end
 
     describe "password" do
-      it "必須であること" do
-        user = User.new(valid_attributes.merge(password: nil))
-        user.valid?
-        expect(user.errors[:password]).to include("can't be blank")
+      context 'nilの場合' do
+        it "無効であること" do
+          user = User.new(valid_attributes.merge(password: nil))
+          user.valid?
+          expect(user.errors[:password]).to include("can't be blank")
+        end
       end
 
-      it "6文字未満は無効であること" do
-        user = User.new(valid_attributes.merge(password: "12345"))
+      context '7文字の場合' do
+        it "無効であること" do
+        user = User.new(valid_attributes.merge(password: "1234567"))
         user.valid?
-        expect(user.errors[:password]).to include("is too short (minimum is 6 characters)")
+        expect(user.errors[:password]).to include("is too short (minimum is 8 characters)")
       end
 
-      it "6文字以上なら有効であること" do
-        user = User.new(valid_attributes.merge(password: "123456"))
-        expect(user).to be_valid
+      context '8文字の場合' do
+        it '有効であること' do
+          user = User.new(valid_attributes.merge(password: "12345678"))
+          expect(user).to be_valid
+        end
+      end
+
+      context '8文字以上の場合' do
+        it '有効であること' do
+          user = User.new(valid_attributes.merge(password: "password123456"))
+          expect(user).to be_valid
+        end
       end
     end
 
@@ -94,9 +132,11 @@ RSpec.describe User, type: :model do
   end
 
   describe "#full_name" do
-    it "last_name と first_name を結合して返すこと" do
-      user = User.new(valid_attributes)
-      expect(user.full_name).to eq("テスト 太郎")
+    context 'first_nameとlast_nameが両方存在する場合' do
+      it "last_nameとfirst_nameをスペースで結合して返すこと" do
+        user = User.new(valid_attributes)
+        expect(user.full_name).to eq("テスト 太郎")
+      end
     end
 
     it "どちらか一方が存在しない場合は存在する方を返すこと" do
