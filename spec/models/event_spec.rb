@@ -31,8 +31,7 @@ RSpec.describe Event, type: :model do
       end
     end
 
-    describe 'title' do #タイトル
-      # どんな入力経路でもバリデーションが正しく動くことを保証できる為にする。下2つ
+    describe 'title' do 
       context 'nilの場合' do
         it '無効であること' do
           event = Event.new(valid_attributes.merge(title: nil))
@@ -103,11 +102,25 @@ RSpec.describe Event, type: :model do
           expect(event).to be_valid
         end
       end
+
+      context '空白のみの場合' do
+        it '有効であること' do
+          event = Event.new(valid_attributes.merge(description: "   "))
+          expect(event).to be_valid
+        end
+      end
     end
 
     describe 'event_date' do  #主催日
-      context '有効な日付の場合' do
-        it '登録できること' do
+      context '今日の日付の場合' do
+        it '有効であること' do
+          event = Event.new(valid_attributes.merge(event_date: Date.today))
+          expect(event).to be_valid
+        end
+      end
+
+      context '未来の日付の場合' do
+        it '有効であること' do
           event = Event.new(valid_attributes.merge(event_date: Date.tomorrow))
           expect(event).to be_valid
         end
@@ -124,7 +137,7 @@ RSpec.describe Event, type: :model do
         it '無効であること' do
           event = Event.new(valid_attributes.merge(event_date: nil))
           event.valid?
-          expect(event.errors[:event_date]).to be_present
+          expect(event.errors[:event_date]).to include("can't be blank")
         end
       end
     end
@@ -134,15 +147,22 @@ RSpec.describe Event, type: :model do
         it '無効であること' do
           event = Event.new(valid_attributes.merge(organizer_name: nil))
           event.valid?
-          expect(event.errors[:organizer_name]).to be_present
-        end
+          expect(event.errors[:organizer_name]).to include("can't be blank")
       end
 
       context '空文字の場合' do
         it '無効であること' do
           event = Event.new(valid_attributes.merge(organizer_name: ""))
           event.valid?
-          expect(event.errors[:organizer_name]).to be_present
+          expect(event.errors[:organizer_name]).to include("can't be blank")
+        end
+      end
+
+      context '空白のみの場合' do
+        it '無効であること' do
+          event = Event.new(valid_attributes.merge(organizer_name: "   "))
+          event.valid?
+          expect(event.errors[:organizer_name]).to include("can't be blank")
         end
       end
 
@@ -159,7 +179,7 @@ RSpec.describe Event, type: :model do
         it '無効であること' do
           event = Event.new(valid_attributes.merge(target_departments: nil))
           event.valid?
-          expect(event.errors[:target_departments]).to be_present
+          expect(event.errors[:target_departments]).to include("can't be blank")
         end
       end
 
@@ -167,7 +187,15 @@ RSpec.describe Event, type: :model do
         it '無効であること' do
           event = Event.new(valid_attributes.merge(target_departments: ""))
           event.valid?
-          expect(event.errors[:target_departments]).to be_present
+          expect(event.errors[:target_departments]).to include("can't be blank")
+        end
+      end
+
+      context '空白のみの場合' do
+        it '無効であること' do
+          event = Event.new(valid_attributes.merge(target_departments: "   "))
+          event.valid?
+          expect(event.errors[:target_departments]).to include("can't be blank")
         end
       end
 
@@ -175,6 +203,24 @@ RSpec.describe Event, type: :model do
         it '登録できること' do
           event = Event.new(valid_attributes.merge(target_departments: "営業部"))
           expect(event).to be_valid
+        end
+      end
+    end
+  end
+
+  describe 'user_id (関連付け)' do
+      context 'userが存在する場合' do
+        it '有効であること' do
+          event = Event.new(valid_attributes)
+          expect(event).to be_valid
+        end
+      end
+
+      context 'userが存在しない場合' do
+        it '無効であること' do
+          event = Event.new(valid_attributes.merge(user: nil))
+          event.valid?
+          expect(event.errors[:user]).to include("must exist")
         end
       end
     end
@@ -202,6 +248,18 @@ RSpec.describe Event, type: :model do
       event = Event.create!(valid_attributes)
       event.destroy
       expect(Event.exists?(event.id)).to be_falsey
+    end
+  end
+
+  describe '関連付け' do
+    it 'userに紐づいていること' do
+      event = Event.create!(valid_attributes)
+      expect(event.user).to eq(user)
+    end
+
+    it 'userが削除されるとeventも削除されること（dependent: :destroyの場合）' do
+      event = Event.create!(valid_attributes)
+      expect { user.destroy }.to change { Event.count }.by(-1)
     end
   end
 end

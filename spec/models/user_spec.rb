@@ -90,9 +90,10 @@ RSpec.describe User, type: :model do
 
       context '7文字の場合' do
         it "無効であること" do
-        user = User.new(valid_attributes.merge(password: "1234567"))
-        user.valid?
-        expect(user.errors[:password]).to include("is too short (minimum is 8 characters)")
+          user = User.new(valid_attributes.merge(password: "1234567"))
+          user.valid?
+          expect(user.errors[:password]).to include("is too short (minimum is 8 characters)")
+        end
       end
 
       context '8文字の場合' do
