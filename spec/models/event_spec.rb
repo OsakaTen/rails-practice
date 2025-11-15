@@ -233,8 +233,8 @@ RSpec.describe Event, type: :model do
     end
 
     it 'レコードを読み取れること（Read）' do
-      event = Event.create!(valid_attributes)
-      found = Event.find(event.id)
+      new_event = Event.create!(valid_attributes)
+      found = Event.find(new_event.id)
       expect(found.title).to eq("テストイベント")
     end
 
