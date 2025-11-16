@@ -35,9 +35,17 @@ RSpec.describe User, type: :model do
         end
       end
 
-      context '空白のみの場合' do
+      context '空白のみの場合（半角スペース）' do
         it "無効であること" do
-          user = User.new(valid_attributes.merge(email: "   "))
+          user = User.new(valid_attributes.merge(email: "    ")) # 半角4つとか
+          user.valid?
+          expect(user.errors[:email]).to include("can't be blank")
+        end
+      end
+
+      context '空白のみの場合（全角スペース）' do
+        it "無効であること" do
+          user = User.new(valid_attributes.merge(email: "\u3000\u3000")) # 全角2つ
           user.valid?
           expect(user.errors[:email]).to include("can't be blank")
         end

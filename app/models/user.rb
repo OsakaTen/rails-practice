@@ -11,6 +11,9 @@ class User < ApplicationRecord
   validates :first_name, presence: true
   validates :last_name, presence: true
 
+  # メールの前後にある半角・全角スペースを削除
+  before_validation :normalize_email
+
   # フルネームを返すメソッド ここから下はAiで書きました
   def full_name
     [last_name, first_name].compact.join(" ")
@@ -24,5 +27,15 @@ class User < ApplicationRecord
   # 一般ユーザーかどうかをチェック
   def regular_user?
     role == 'user' || role.nil?
+  end
+
+  private
+
+  def normalize_email
+    return if email.nil?
+
+    # 全角スペースを半角スペースに変換してから strip
+    # メールアドレスの前後にある半角・全角スペースを消して、きれいな状態にしてから保存する
+    self.email = email.tr("\u3000", " ").strip
   end
 end
