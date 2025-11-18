@@ -6,24 +6,17 @@ class User < ApplicationRecord
 
   has_many :events, dependent: :destroy
 
-  # validates :first_name, :last_name, :role, presence: true
+  # devicenの設定を変えてこちらでは書かないようにしました
 
-  # enum role: { user: 0, admin: 1 }
+  validates :first_name, presence: true
+  validates :last_name, presence: true
 
-  # def full_name
-  #   [first_name, last_name].compact.join(" ")
-  # end
-
-  # バリデーション
-  validates :email, presence: true, uniqueness: true
+  # メールの前後にある半角・全角スペースを削除
+  before_validation :normalize_email
 
   # フルネームを返すメソッド ここから下はAiで書きました
   def full_name
-    if first_name.present? && last_name.present?
-      "#{last_name} #{first_name}"
-    else
-      email
-    end
+    [last_name, first_name].compact.join(" ")
   end
 
   # 管理者かどうかをチェック
@@ -34,5 +27,15 @@ class User < ApplicationRecord
   # 一般ユーザーかどうかをチェック
   def regular_user?
     role == 'user' || role.nil?
+  end
+
+  private
+
+  def normalize_email
+    return if email.nil?
+
+    # 全角スペースを半角スペースに変換してから strip
+    # メールアドレスの前後にある半角・全角スペースを消して、きれいな状態にしてから保存する
+    self.email = email.tr("\u3000", " ").strip
   end
 end
