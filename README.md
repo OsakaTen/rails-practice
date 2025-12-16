@@ -7,6 +7,12 @@ Ruby on Rails 7 を使って実装した、社内向けイベント管理ポー�
 > - ✅ シナリオ1：イベントの登録・編集・削除・一覧表示（管理画面）  
 > - ⏳ シナリオ2：参加申し込み・確認メール送信・参加者管理（未実装）
 
+<img width="1920" height="872" alt="スクリーンショット 2025-12-10 170232" src="https://github.com/user-attachments/assets/aead9c08-fd79-4055-bffc-4c60ed5e5cd8" />
+<img width="1920" height="864" alt="スクリーンショット 2025-12-10 170246" src="https://github.com/user-attachments/assets/958d4cd7-851f-42e4-a7e2-677dc4bbc2bf" />
+<img width="1920" height="863" alt="スクリーンショット 2025-12-10 170323" src="https://github.com/user-attachments/assets/f0e718bd-61b1-437c-bdb6-ab2fbe84a64a" />
+<img width="1920" height="876" alt="スクリーンショット 2025-12-10 170336" src="https://github.com/user-attachments/assets/7641bad8-3fac-4fdc-9792-a50a6761249c" />
+<img width="1920" height="815" alt="スクリーンショット 2025-12-10 170353" src="https://github.com/user-attachments/assets/53032ef8-8fd3-4c8f-884b-6403bd333832" />
+
 ---
 
 ## 概要
