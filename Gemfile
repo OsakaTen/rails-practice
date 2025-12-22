@@ -44,7 +44,7 @@ gem "cssbundling-rails"
 
 gem 'devise'
 
-gem "prism", "1.3.0" # Syntax highlighting for code blocks in markdown
+gem "prism", "1.6.0" # Syntax highlighting for code blocks in markdown
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
